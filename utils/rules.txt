@@ -1,0 +1,9 @@
+Minesweeper is a game where mines are hidden in a grid of squares. Safe squares have numbers telling you how many mines touch the square. You can use the number clues to solve the game by opening all of the safe squares. If you click on a mine you lose the game!
+
+You open squares with the left mouse button and put flags on mines with the right mouse button. When you open a square that does not touch any mines, it will be empty and the adjacent squares will automatically open in all directions until reaching squares that contain numbers.
+
+If you flag all of the mines touching a number, chording on the number opens the remaining squares. Chording is when you press both mouse buttons at the same time. However, if you place the correct number of flags on the wrong squares, chording will explode the mines.
+
+The three difficulty levels are Beginner (9x9 with 10 mines), Intermediate (16x16 with 40 mines) and Expert (30x16 with 99 mines). The game ends when all safe squares have been opened. A counter shows the number of mines without flags, and a clock shows your time in seconds.
+
+You also can play Custom games up to 30x24 with a minimum of 10 mines and maximum of (x-1)(y-1) mines.
