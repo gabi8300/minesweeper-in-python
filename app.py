@@ -1,5 +1,5 @@
 import tkinter as tk
-from frames import MainFrame, FormFrame, RulesFrame
+from frames import MainFrame, FormFrame, RulesFrame, GameFrame
 
 class App(tk.Tk):
     def __init__(self):
@@ -17,19 +17,15 @@ class App(tk.Tk):
         self.configure_buttons()
 
     def add_frames(self):
-        main_frame = MainFrame(self)
-        main_frame.grid(column=0, row=0, sticky="nsew")
-        self.frames['main_frame'] = main_frame
+        self.frames.update({'main_frame': MainFrame(self),
+                            'form_frame': FormFrame(self),
+                            'rules_frame': RulesFrame(self),
+                            'game_frame': GameFrame(self)})
 
-        form_frame = FormFrame(self)
-        form_frame.grid(column=0, row=0, sticky="nsew")
-        self.frames['form_frame'] = form_frame
+        for frame in self.frames.values():
+            frame.grid(column=0, row=0, sticky="nsew")
 
-        rules_frame = RulesFrame(self)
-        rules_frame.grid(column=0, row=0, sticky="nsew")
-        self.frames['rules_frame'] = rules_frame
-
-        main_frame.tkraise()
+        self.frames['main_frame'].tkraise()
 
     def configure_buttons(self):
         goto_form = lambda: self.frames['form_frame'].tkraise()
@@ -40,3 +36,10 @@ class App(tk.Tk):
 
         quit_game = lambda: self.frames['main_frame'].quit()
         self.frames['main_frame'].winfo_children()[2].configure(command=quit_game)
+
+        goto_game = lambda: self.frames['game_frame'].tkraise()
+        self.frames['form_frame'].winfo_children()[-2].configure(command=goto_game)
+
+        goto_main = lambda: self.frames['main_frame'].tkraise()
+        self.frames['form_frame'].winfo_children()[-1].configure(command=goto_main)
+        self.frames['rules_frame'].winfo_children()[-1].configure(command=goto_main)
