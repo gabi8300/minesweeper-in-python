@@ -35,7 +35,7 @@ class MainFrame(MyFrame):
 
 class FormFrame(MyFrame):
     ROWS = 6
-    COLS = 5
+    COLS = 4
     difficulties = {"Begginer": [9, 9, 10],
                     "Medium": [16, 16, 40],
                     "Expert": [16, 30, 99]}
@@ -50,20 +50,23 @@ class FormFrame(MyFrame):
 
     def add_widgets(self):
         for i, text in enumerate(["Height", "Width", "Mines"]):
-            ttk.Label(self, text=text).grid(column=i+3, row=1)
+            ttk.Label(self, text=text).grid(column=i+2, row=1)
 
+        selected = tk.StringVar()
         for i, dict in enumerate(self.difficulties.items()):
-            ttk.Label(self, text=dict[0]).grid(column=2, row=i+2)
+            ttk.Radiobutton(self, text=dict[0], value=dict[0], variable=selected)
+            self.winfo_children()[-1].grid(column=1, row=i+2, sticky="w")
             for j, val in enumerate(dict[1]):
-                ttk.Label(self, text=str(val)).grid(column=j+3, row=i+2)
+                ttk.Label(self, text=str(val)).grid(column=j+2, row=i+2)
 
-        ttk.Label(self, text="Custom").grid(column=2, row=5)
+        ttk.Radiobutton(self, text="Custom", value="Custom", variable=selected)
+        self.winfo_children()[-1].grid(column=1, row=5, sticky="w")
         for i, vals in enumerate(self.custom_limits.values()):
             ttk.Spinbox(self, from_=vals[0], to=vals[1], width=5)
-            self.winfo_children()[-1].grid(column=i+3, row=5, pady=15)
+            self.winfo_children()[-1].grid(column=i+2, row=5, pady=15)
 
         start_btn = ttk.Button(self, text="Start")
-        start_btn.grid(column=3, row=self.ROWS, columnspan=2, pady=10)
+        start_btn.grid(column=2, row=self.ROWS, columnspan=2, pady=10)
 
         ttk.Button(self, text="Back").place(x=20, y=20)
 
@@ -89,7 +92,6 @@ class RulesFrame(MyFrame):
 class GameFrame(MyFrame):
     def __init__(self, container):
         super().__init__(container)
-        self.configure_grid()
         self.add_widgets()
 
     def add_widgets(self):
