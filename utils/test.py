@@ -1,6 +1,4 @@
-difficulties = {"Begginer": [9, 9, 10],
-                    "Medium": [16, 16, 40],
-                    "Expert": [16, 30, 99]}
+dict = {"a": [1, 2, 3],
+        "b": [4, 5, 6]}
 
-for i in enumerate(difficulties.items()):
-    print(i)
+print(dict["b"][2])
