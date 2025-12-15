@@ -1,4 +1,8 @@
-dict = {"a": [1, 2, 3],
-        "b": [4, 5, 6]}
+height = 9
+width = 9
+mines = 10
 
-print(dict["b"][2])
+import random
+
+randoms = random.sample(range(1, width*height), mines)
+print(randoms)

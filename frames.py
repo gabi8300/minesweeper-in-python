@@ -100,7 +100,7 @@ class GameFrame(MyFrame):
         self.add_widgets()
 
     def add_widgets(self):
-        self.board_frame = ttk.Frame(self)
+        self.board_frame = ttk.Frame(self, borderwidth=15, relief='groove')
         self.board_frame.grid(column=1, row=1)
 
         for i in range(9):
