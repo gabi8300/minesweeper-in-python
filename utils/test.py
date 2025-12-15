@@ -1,8 +1,6 @@
-height = 9
-width = 9
-mines = 10
+i = 3
+j = 4
 
-import random
-
-randoms = random.sample(range(1, width*height), mines)
-print(randoms)
+for x in range(i-1, i+2):
+   for y in range(j-1, j+2):
+      print(x, y)

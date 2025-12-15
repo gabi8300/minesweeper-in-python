@@ -29,3 +29,12 @@ class Game():
                 count+=1
                 if count in positions:
                     self.board[i][j].value = "mine"
+                    self.update_neighbours(i, j)
+
+    def update_neighbours(self, i, j):
+        for x in range(i-1, i+2):
+            for y in range(j-1, j+2):
+                if 0 <= x < self.height and 0 <= y < self.width:
+                    value = self.board[x][y].value
+                    if value != "mine":
+                        self.board[x][y].value = str(int(value) + 1)
