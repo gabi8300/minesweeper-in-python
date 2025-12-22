@@ -1,6 +1,6 @@
-i = 3
-j = 4
+lista = [1, 2, 3, 4]
 
-for x in range(i-1, i+2):
-   for y in range(j-1, j+2):
-      print(x, y)
+def sum(x):
+    return x+1
+
+print(list(map(sum, lista)))
