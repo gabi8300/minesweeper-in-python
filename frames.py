@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from abc import ABC, abstractmethod
+from settings import *
 
 class MyFrame(ttk.Frame, ABC):
     ROWS = 1
@@ -29,25 +30,25 @@ class MenuFrame(MyFrame):
         self.configure_grid(pady=50)
 
         self.style = ttk.Style()
-        self.style.configure("Menu.TButton", 
-                             font=('Bahnschrift', 17),
-                             padding=(40, 5))
+        self.style.configure(
+            "Menu.TButton", 
+            font=('Bahnschrift', 17),
+            padding=(40, 5)
+        )
         
         self.add_widgets()
 
     def add_widgets(self):
         for i, text in enumerate(["New Game", "Rules", "Exit"]):
-            ttk.Button(self, text=text, style="Menu.TButton").grid(column=1, row=i+1)
+            ttk.Button(
+                self, 
+                text=text, 
+                style="Menu.TButton"
+            ).grid(column=1, row=i+1)
 
 class SettingsFrame(MyFrame):
     ROWS = 7
     COLS = 4
-    difficulties = {"Begginer": [9, 9, 10],
-                    "Medium": [16, 16, 40],
-                    "Expert": [16, 30, 99]}
-    custom_limits = {"Height": [5, 16],
-                     "Width": [8, 30],
-                     "Mines": [10, 480]}
 
     def __init__(self, container):
         super().__init__(container)
@@ -55,7 +56,6 @@ class SettingsFrame(MyFrame):
 
         self.difficulty = tk.StringVar()
         self.parameters = [tk.IntVar(), tk.IntVar(), tk.IntVar()]
-
         self.timer = tk.IntVar()
 
         self.add_widgets()
@@ -64,21 +64,44 @@ class SettingsFrame(MyFrame):
         for i, text in enumerate(["Height", "Width", "Mines"]):
             ttk.Label(self, text=text).grid(column=i+2, row=1)
 
-        for i, dict in enumerate(self.difficulties.items()):
-            ttk.Radiobutton(self, text=dict[0], value=dict[0], variable=self.difficulty)
-            self.winfo_children()[-1].grid(column=1, row=i+2, sticky="w")
+        for i, dict in enumerate(difficulties.items()):
+            radio = ttk.Radiobutton(
+                self, 
+                text=dict[0], 
+                value=dict[0], 
+                variable=self.difficulty
+            )
+            radio.grid(column=1, row=i+2, sticky="w")
+
             for j, val in enumerate(dict[1]):
                 ttk.Label(self, text=str(val)).grid(column=j+2, row=i+2)
-        ttk.Radiobutton(self, text="Custom", value="Custom", variable=self.difficulty)
-        self.winfo_children()[-1].grid(column=1, row=5, sticky="w")
-        
-        for i, vals in enumerate(self.custom_limits.values()):
-            ttk.Spinbox(self, from_=vals[0], to=vals[1], textvariable=self.parameters[i], width=5)
-            self.winfo_children()[-1].grid(column=i+2, row=5, pady=15)
 
+        radio = ttk.Radiobutton(
+            self, 
+            text="Custom", 
+            value="Custom", 
+            variable=self.difficulty
+        )
+        radio.grid(column=1, row=5, sticky="w")
+        
+        for i, vals in enumerate(custom_limits.values()):
+            spinbox = ttk.Spinbox(
+                self, 
+                from_=vals[0], 
+                to=vals[1], 
+                textvariable=self.parameters[i], 
+                width=5
+            )
+            spinbox.grid(column=i+2, row=5, pady=15)
 
         ttk.Label(self, text='Timer').grid(column=1, row=6)
-        ttk.Spinbox(self, from_=0, to=1800, textvariable=self.timer, width=5).grid(column=2, row=6)
+        ttk.Spinbox(
+            self, 
+            from_=0, 
+            to=1800, 
+            textvariable=self.timer, 
+            width=5
+        ).grid(column=2, row=6)
         ttk.Label(self, text="seconds").grid(column=3, row=6)
 
         start_btn = ttk.Button(self, text="Start")
@@ -89,9 +112,8 @@ class SettingsFrame(MyFrame):
     def reset_settings(self):
         self.difficulty.set("")
         self.timer.set(0)
-
-        for p in self.parameters:
-            p.set(0)
+        for param in self.parameters:
+            param.set(0)
 
 class RulesFrame(MyFrame):
     def __init__(self, container):
@@ -99,7 +121,14 @@ class RulesFrame(MyFrame):
         self.add_widgets()
 
     def add_widgets(self):
-        rules = tk.Text(self, borderwidth=0)
+        rules = tk.Text(
+            self, 
+            borderwidth=10, 
+            relief="sunken", 
+            padx=30, 
+            pady=30,
+            font = ('Bahnschrift', 12)
+        )
         rules.insert(index=1.0, chars=RulesFrame.get_rules())
         rules.config(state="disabled")
         rules.pack(padx=20, pady=70, fill="both", expand=True)
@@ -114,35 +143,39 @@ class RulesFrame(MyFrame):
 
 class GameFrame(MyFrame):
     ROWS = 2
+
     def __init__(self, container):
         super().__init__(container)
         self.configure_grid()
 
-        self.timer_frame = ttk.Frame(self, borderwidth=15, relief='sunken')
-        self.board_frame = ttk.Frame(self, borderwidth=15, relief='sunken')
+        self.timer_frame = ttk.Frame(self, borderwidth=10, relief='sunken')
+        self.board_frame = ttk.Frame(self)
         self.add_widgets()
 
     def add_widgets(self):
-        self.timer_frame.grid(column=1, row=1)
+        self.timer_frame.grid(column=1, row=1, pady=10)
         self.board_frame.grid(column=1, row=2)
 
 class PopupFrame(MyFrame):
     ROWS = 4
+
     def __init__(self, container, text=""):
-        super().__init__(container, 
-                         padding=(100, 10),
-                         borderwidth=10,
-                         relief="ridge")
+        super().__init__(
+            container, 
+            padding=(100, 10),
+            borderwidth=10,
+            relief="ridge"
+        )
         self.text = text
 
         self.configure_grid()
         self.add_widgets()
 
     def add_widgets(self):
-        label = ttk.Label(self, text=self.text)
-        button1 = ttk.Button(self, text="New settings")
-        button2 = ttk.Button(self, text="Keep settings")
-        button3 = ttk.Button(self, text="Exit")
+        ttk.Label(self, text=self.text)
+        ttk.Button(self, text="New settings")
+        ttk.Button(self, text="Keep settings")
+        ttk.Button(self, text="Quit")
 
-        for i, widget in enumerate((label, button1, button2, button3)):
+        for i, widget in enumerate(self.winfo_children()):
             widget.grid(column=1, row=i+1, pady=15)
