@@ -70,17 +70,17 @@ class App(tk.Tk):
             self.create_new_match(*params, timer)
             self.settings.reset_settings()
 
-        popup_buttons = self.match.popup.winfo_children()
-        popup_buttons[1].configure(command=self.new_settings)
-        keep_settings = lambda: self.create_new_match(*params, timer)
-        popup_buttons[2].configure(command=keep_settings)
-        popup_buttons[3].configure(command=self.menu.tkraise)
-
     def create_new_match(self, height, width, mines, timer):
         self.match = Game(
             self.game.board_frame,
             height, width, mines
         )
+
+        popup_buttons = self.match.popup.winfo_children()
+        popup_buttons[1].configure(command=self.new_settings)
+        keep_settings = lambda: self.create_new_match(height, width, mines, timer)
+        popup_buttons[2].configure(command=keep_settings)
+        popup_buttons[3].configure(command=self.menu.tkraise)
 
         self.cronometer = ttk.Label(self.game.timer_frame, text="")
         self.cronometer.grid(column=0, row=0)
@@ -89,13 +89,16 @@ class App(tk.Tk):
         self.game.tkraise()
 
     def update_timer(self, timer):
-        if timer >= 0:
+        if timer >= 0 and self.match.is_running:
             minutes = timer // 60
             seconds = timer % 60
             self.cronometer['text'] = f"{minutes:02}:{seconds:02}"
             self.after(1000, self.update_timer, timer-1)
 
     def new_settings(self):
+        for i in range(self.match.height):
+            for j in range(self.match.width):
+                self.match.board[i][j].destroy()
         self.match = None
         self.settings.reset_settings()
         self.settings.tkraise()

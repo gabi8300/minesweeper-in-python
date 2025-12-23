@@ -10,6 +10,7 @@ class Game():
         self.height = height
         self.width = width
         self.mines = mines
+        self.is_running = True
 
         self.popup = PopupFrame(self.container.master.master)
         self.popup.grid(column=0, row=0)
@@ -57,6 +58,7 @@ class Game():
         result = self.check_win()
         if result in ("lost", "won"):
             self.popup.winfo_children()[0]['text'] = f"You {result}!"
+            self.is_running = False
             self.popup.tkraise()
 
     def reveal_mines(self):
