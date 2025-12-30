@@ -46,14 +46,16 @@ class App(tk.Tk):
 
     def configure_buttons(self):
         """Adds functionality to the buttons of the frames"""
-        self.menu.winfo_children()[0].configure(command=self.settings.tkraise)
-        self.menu.winfo_children()[1].configure(command=self.rules.tkraise)
-        self.menu.winfo_children()[2].configure(command=self.menu.quit)
+        menu_buttons = self.menu.winfo_children()
+        menu_buttons[0].configure(command=self.settings.tkraise)
+        menu_buttons[1].configure(command=self.rules.tkraise)
+        menu_buttons[2].configure(command=self.menu.quit)
 
-        self.settings.winfo_children()[-1].configure(command=self.menu.tkraise)
+        settings_buttons = self.settings.winfo_children()
+        settings_buttons[-1].configure(command=self.menu.tkraise)
         self.rules.winfo_children()[-1].configure(command=self.menu.tkraise)
 
-        self.settings.winfo_children()[-2].configure(command=self.configure_game)
+        settings_buttons[-2].configure(command=self.configure_game)
 
     def configure_game(self):
         """
@@ -78,7 +80,6 @@ class App(tk.Tk):
             if diff != "Custom":
                 params = [difficulties[diff][i] for i in range(3)]
             self.create_new_round(*params, timer)
-            # self.settings.reset_settings()
 
     def create_new_round(self, height, width, mines, timer):
         """
@@ -119,11 +120,12 @@ class App(tk.Tk):
             seconds = timer % 60
             self.cronometer['text'] = f"{minutes:02}:{seconds:02}"
             self.after(1000, self.update_timer, timer-1)
-        else:
+        elif timer < 0:
             self.round.end_game("lost")
 
     def new_settings(self):
         """Resets game settings and redirects to the settings menu"""
+        self.cronometer['text'] = ""
         for i in range(self.round.height):
             for j in range(self.round.width):
                 self.round.board[i][j].destroy()
@@ -133,6 +135,7 @@ class App(tk.Tk):
 
     def quit_round(self):
         """Exits the round and redirects to the main menu"""
+        self.cronometer['text'] = ""
         for i in range(self.round.height):
             for j in range(self.round.width):
                 self.round.board[i][j].destroy()
@@ -156,6 +159,6 @@ class App(tk.Tk):
         size = height * width
         return not (
             5 <= height <= 16 and \
-            8 <= width <= 30 and \
-            0.10 * size <= mines <= 0.75 * size
+            5 <= width <= 30 and \
+            int(0.10 * size) <= mines <= int(0.75 * size)
         )

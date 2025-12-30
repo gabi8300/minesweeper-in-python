@@ -35,10 +35,14 @@ class Game():
             for j in range(self.width):
                 self.board[i].append(Tile(self.container))
                 self.board[i][j].grid(column=j, row=i)
-                self.board[i][j].bind('<Button-1>', 
-                                      lambda event, x=i, y=j: self.left_click(event, x, y))
-                self.board[i][j].bind('<Button-3>', 
-                                      lambda event, x=i, y=j: self.toggle_flag(event, x, y))
+                self.board[i][j].bind(
+                    '<Button-1>', 
+                    lambda event, x=i, y=j: self.left_click(event, x, y)
+                )
+                self.board[i][j].bind(
+                    '<Button-3>', 
+                    lambda event, x=i, y=j: self.toggle_flag(event, x, y)
+                )
 
     def add_mines(self):
         """Adds the mines to the game board"""

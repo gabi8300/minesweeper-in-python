@@ -6,6 +6,6 @@ difficulties = {
 
 custom_limits = {
     "Height": [5, 16],
-    "Width": [8, 30],
-    "Mines": [10, 435]
+    "Width": [5, 30],
+    "Mines": [2, 435]
 }
