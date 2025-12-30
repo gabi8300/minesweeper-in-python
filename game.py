@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from frames import PopupFrame
 from tile import Tile
 import random
@@ -25,8 +24,10 @@ class Game():
             for j in range(self.width):
                 self.board[i].append(Tile(self.container))
                 self.board[i][j].grid(column=j, row=i)
-                self.board[i][j].bind('<Button-1>', lambda event, x=i, y=j: self.right_click(event, x, y))
-                self.board[i][j].bind('<Button-3>', Game.toggle_flag)
+                self.board[i][j].bind('<Button-1>', 
+                                      lambda event, x=i, y=j: self.left_click(event, x, y))
+                self.board[i][j].bind('<Button-3>', 
+                                      lambda event, x=i, y=j: self.toggle_flag(event, x, y))
 
     def add_mines(self):
         count = 0
@@ -48,7 +49,7 @@ class Game():
                     if value != "mine":
                         self.board[x][y].value = str(int(value) + 1)
 
-    def right_click(self, event, i, j):
+    def left_click(self, event, i, j):
         if event.widget.value == "mine":
             event.widget.config(bg="red")
             self.reveal_mines()
@@ -56,10 +57,8 @@ class Game():
             self.reveal_tiles(i, j)
 
         result = self.check_win()
-        if result in ("lost", "won"):
-            self.popup.winfo_children()[0]['text'] = f"You {result}!"
-            self.is_running = False
-            self.popup.tkraise()
+        if result != "continue":
+            self.end_game(result)
 
     def reveal_mines(self):
         for i in range(self.height):
@@ -79,6 +78,11 @@ class Game():
         if count == (self.width * self.height) - self.mines:
             return "won"
         return "continue"
+    
+    def end_game(self, result):
+        self.popup.winfo_children()[0]['text'] = f"You {result}!"
+        self.is_running = False
+        self.popup.tkraise()
 
 
     def reveal_tiles(self, i, j):
@@ -92,12 +96,14 @@ class Game():
                         and self.board[x][y].status == "hidden":
                             self.reveal_tiles(x, y)
 
-    @staticmethod
-    def toggle_flag(event):
+    def toggle_flag(self, event, i, j):
         if event.widget.status == "hidden":
             Game.change_status(event.widget, "flagged")
+            event.widget.unbind('<Button-1>')
         elif event.widget.status == "flagged":
             Game.change_status(event.widget, "hidden")
+            event.widget.bind('<Button-1>', 
+                              lambda event, x=i, y=j: self.left_click(event, x, y))
 
     @staticmethod
     def change_status(widget, status):

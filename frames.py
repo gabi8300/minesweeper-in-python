@@ -56,7 +56,7 @@ class SettingsFrame(MyFrame):
 
         self.difficulty = tk.StringVar()
         self.parameters = [tk.IntVar(), tk.IntVar(), tk.IntVar()]
-        self.timer = tk.IntVar()
+        self.timer = tk.IntVar(value=90)
 
         self.add_widgets()
 
@@ -111,7 +111,7 @@ class SettingsFrame(MyFrame):
 
     def reset_settings(self):
         self.difficulty.set("")
-        self.timer.set(0)
+        self.timer.set(90)
         for param in self.parameters:
             param.set(0)
 
@@ -148,7 +148,7 @@ class GameFrame(MyFrame):
         super().__init__(container)
         self.configure_grid()
 
-        self.timer_frame = ttk.Frame(self, borderwidth=10, relief='sunken')
+        self.timer_frame = ttk.Frame(self)
         self.board_frame = ttk.Frame(self)
         self.add_widgets()
 

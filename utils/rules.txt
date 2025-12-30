@@ -4,4 +4,4 @@ You open squares with the left mouse button and put flags on mines with the righ
 
 The three difficulty levels are Beginner (9x9 with 10 mines), Intermediate (16x16 with 40 mines) and Expert (30x16 with 99 mines). The game ends when all safe squares have been opened. A counter shows the number of mines without flags, and a clock shows your time in seconds.
 
-You also can play Custom games up to 30x24 with a minimum of 10 mines and maximum of (x-1)(y-1) mines.
+You also can play Custom games up to 30x16 with a minimum of 10 mines and maximum of (x-1)(y-1) mines.

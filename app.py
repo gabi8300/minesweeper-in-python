@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-from frames import MenuFrame, SettingsFrame, RulesFrame, GameFrame
-from game import Game
 from tkinter.messagebox import showinfo
+from frames import *
+from game import Game
 from settings import difficulties
 
 class App(tk.Tk):
@@ -12,7 +12,7 @@ class App(tk.Tk):
         self.title("Minesweeper")
         self.geometry('1000x600+130+20')
         self.font = ('Bahnschrift', 12)
-        self.match = None
+        self.round = None
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -62,25 +62,27 @@ class App(tk.Tk):
 
         if diff == "":
             showinfo(title='Error', message="You didn't choose a difficulty!")
+        elif timer < 0 or timer > 1800:
+            showinfo(title='Error', message="Timer must be in [0, 1800]!")
         elif diff == "Custom" and App.check_custom(*params):
             showinfo(title='Error', message="Parameters out of bounds!")
         else:
             if diff != "Custom":
                 params = [difficulties[diff][i] for i in range(3)]
-            self.create_new_match(*params, timer)
-            self.settings.reset_settings()
+            self.create_new_round(*params, timer)
+            # self.settings.reset_settings()
 
-    def create_new_match(self, height, width, mines, timer):
-        self.match = Game(
+    def create_new_round(self, height, width, mines, timer):
+        self.round = Game(
             self.game.board_frame,
             height, width, mines
         )
 
-        popup_buttons = self.match.popup.winfo_children()
+        popup_buttons = self.round.popup.winfo_children()
         popup_buttons[1].configure(command=self.new_settings)
-        keep_settings = lambda: self.create_new_match(height, width, mines, timer)
+        keep_settings = lambda: self.create_new_round(height, width, mines, timer)
         popup_buttons[2].configure(command=keep_settings)
-        popup_buttons[3].configure(command=self.menu.tkraise)
+        popup_buttons[3].configure(command=self.quit_round)
 
         self.cronometer = ttk.Label(self.game.timer_frame, text="")
         self.cronometer.grid(column=0, row=0)
@@ -89,22 +91,27 @@ class App(tk.Tk):
         self.game.tkraise()
 
     def update_timer(self, timer):
-        if timer >= 0 and self.match.is_running:
+        if timer >= 0 and self.round.is_running:
             minutes = timer // 60
             seconds = timer % 60
             self.cronometer['text'] = f"{minutes:02}:{seconds:02}"
             self.after(1000, self.update_timer, timer-1)
+        else:
+            self.round.end_game("lost")
 
     def new_settings(self):
-        for i in range(self.match.height):
-            for j in range(self.match.width):
-                self.match.board[i][j].destroy()
-        self.match = None
+        for i in range(self.round.height):
+            for j in range(self.round.width):
+                self.round.board[i][j].destroy()
+        self.round = None
         self.settings.reset_settings()
         self.settings.tkraise()
 
-    def quit_match(self):
-        self.match = None
+    def quit_round(self):
+        for i in range(self.round.height):
+            for j in range(self.round.width):
+                self.round.board[i][j].destroy()
+        self.round = None
         self.settings.reset_settings()
         self.menu.tkraise()
 
