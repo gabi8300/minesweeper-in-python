@@ -6,7 +6,10 @@ from game import Game
 from settings import difficulties
 
 class App(tk.Tk):
+    """ Represents the main window of the app"""
+
     def __init__(self):
+        """Initializes the main window of the app"""
         super().__init__()
     
         self.title("Minesweeper")
@@ -26,6 +29,7 @@ class App(tk.Tk):
         self.style.configure('TRadiobutton', font=self.font)
 
     def add_frames(self):
+        """Adds all the frames of the app"""
         self.menu = MenuFrame(self)
         self.menu.grid(column=0, row=0, sticky="nsew")
 
@@ -41,6 +45,7 @@ class App(tk.Tk):
         self.menu.tkraise()
 
     def configure_buttons(self):
+        """Adds functionality to the buttons of the frames"""
         self.menu.winfo_children()[0].configure(command=self.settings.tkraise)
         self.menu.winfo_children()[1].configure(command=self.rules.tkraise)
         self.menu.winfo_children()[2].configure(command=self.menu.quit)
@@ -51,6 +56,9 @@ class App(tk.Tk):
         self.settings.winfo_children()[-2].configure(command=self.configure_game)
 
     def configure_game(self):
+        """
+        Validates the parameters set by the use and starts a new round
+        """
         diff = str(self.settings.difficulty.get())
 
         try:
@@ -73,6 +81,15 @@ class App(tk.Tk):
             # self.settings.reset_settings()
 
     def create_new_round(self, height, width, mines, timer):
+        """
+        Creates a new game round
+
+        Args:
+            height (int): board's height
+            width (int): board's width
+            mines (int): the number of mines
+            timer (int): timer seconds
+        """
         self.round = Game(
             self.game.board_frame,
             height, width, mines
@@ -91,6 +108,12 @@ class App(tk.Tk):
         self.game.tkraise()
 
     def update_timer(self, timer):
+        """
+        Updates the timer of a round  every second
+
+        Args:
+            timer (int): timer seconds
+        """
         if timer >= 0 and self.round.is_running:
             minutes = timer // 60
             seconds = timer % 60
@@ -100,6 +123,7 @@ class App(tk.Tk):
             self.round.end_game("lost")
 
     def new_settings(self):
+        """Resets game settings and redirects to the settings menu"""
         for i in range(self.round.height):
             for j in range(self.round.width):
                 self.round.board[i][j].destroy()
@@ -108,6 +132,7 @@ class App(tk.Tk):
         self.settings.tkraise()
 
     def quit_round(self):
+        """Exits the round and redirects to the main menu"""
         for i in range(self.round.height):
             for j in range(self.round.width):
                 self.round.board[i][j].destroy()
@@ -116,9 +141,21 @@ class App(tk.Tk):
         self.menu.tkraise()
 
     @staticmethod
-    def check_custom(h, w, m):
+    def check_custom(height, width, mines):
+        """
+        Validates the given parameters
+
+        Args:
+            height (int): board's height
+            width (int): board's width
+            mines (int): number of mines
+
+        Returns:
+            bool: True/False
+        """
+        size = height * width
         return not (
-            5 <= h <= 16 and \
-            8 <= w <= 30 and \
-            0.10 * h * w <= m <= 0.75 * h * w
+            5 <= height <= 16 and \
+            8 <= width <= 30 and \
+            0.10 * size <= mines <= 0.75 * size
         )

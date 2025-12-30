@@ -4,14 +4,26 @@ from abc import ABC, abstractmethod
 from settings import *
 
 class MyFrame(ttk.Frame, ABC):
+    """ 
+    Represents a basic frame blueprint 
+    that adds gridding and widgets
+    """
     ROWS = 1
     COLS = 1
 
     @abstractmethod
     def add_widgets(self):
+        """Adds the widgets to the farme"""
         print("Add widgets to the frame!")
 
     def configure_grid(self, padx=0, pady=0):
+        """
+        Sets the gridding of the frame
+
+        Args:
+            padx (int): padding on the Ox axis
+            pady (int): padding on the Oy axis
+        """
         self.rowconfigure(0, weight=1)
         for i in range(self.ROWS):
             self.rowconfigure(i+1, weight=0, pad=pady)
@@ -23,9 +35,16 @@ class MyFrame(ttk.Frame, ABC):
         self.columnconfigure(self.COLS+1, weight=1)
 
 class MenuFrame(MyFrame):
+    """Represents the main menu frame"""
     ROWS = 3
 
     def __init__(self, container):
+        """
+        Initializes the main menu frame
+
+        Args:
+            container (Tk): frame's parent container
+        """
         super().__init__(container)
         self.configure_grid(pady=50)
 
@@ -39,18 +58,25 @@ class MenuFrame(MyFrame):
         self.add_widgets()
 
     def add_widgets(self):
+        """Adds the widgets to the frame"""
         for i, text in enumerate(["New Game", "Rules", "Exit"]):
             ttk.Button(
-                self, 
-                text=text, 
+                self, text=text, 
                 style="Menu.TButton"
             ).grid(column=1, row=i+1)
 
 class SettingsFrame(MyFrame):
+    """Represents th settings form frame"""
     ROWS = 7
     COLS = 4
 
     def __init__(self, container):
+        """
+        Initializes the settings form frame
+
+        Args:
+            container (Tk): frame's parent container
+        """
         super().__init__(container)
         self.configure_grid(50, 30)
 
@@ -61,6 +87,7 @@ class SettingsFrame(MyFrame):
         self.add_widgets()
 
     def add_widgets(self):
+        """Adds the widgets to the frame"""
         for i, text in enumerate(["Height", "Width", "Mines"]):
             ttk.Label(self, text=text).grid(column=i+2, row=1)
 
@@ -116,17 +143,24 @@ class SettingsFrame(MyFrame):
             param.set(0)
 
 class RulesFrame(MyFrame):
+    """Represents the rules menu frame"""
     def __init__(self, container):
+        """
+        Initializes the rules menu frame
+
+        Args:
+            container (Tk): frame's parent container
+        """
         super().__init__(container)
         self.add_widgets()
 
     def add_widgets(self):
+        """Adds the widgets to the frame"""
         rules = tk.Text(
             self, 
             borderwidth=10, 
             relief="sunken", 
-            padx=30, 
-            pady=30,
+            padx=30, pady=30,
             font = ('Bahnschrift', 12)
         )
         rules.insert(index=1.0, chars=RulesFrame.get_rules())
@@ -137,14 +171,27 @@ class RulesFrame(MyFrame):
 
     @staticmethod
     def get_rules():
+        """
+        Reads the rules from a file
+
+        Returns:
+            str: the rules
+        """
         with open("utils/rules.txt", "r") as file:
             content = file.read()
         return content
 
 class GameFrame(MyFrame):
+    """Represents the game frame"""
     ROWS = 2
 
     def __init__(self, container):
+        """
+        Initializes the game frame
+
+        Args:
+            container (Tk): frame's parent container
+        """
         super().__init__(container)
         self.configure_grid()
 
@@ -153,13 +200,22 @@ class GameFrame(MyFrame):
         self.add_widgets()
 
     def add_widgets(self):
+        """Adds the widgets to the frame"""
         self.timer_frame.grid(column=1, row=1, pady=10)
         self.board_frame.grid(column=1, row=2)
 
 class PopupFrame(MyFrame):
+    """Represents a notification popup"""
     ROWS = 4
 
     def __init__(self, container, text=""):
+        """
+        Initializes the popup frame
+
+        Args:
+            container (Tk): frame's parent container
+            text (str): frame's text content
+        """
         super().__init__(
             container, 
             padding=(100, 10),
@@ -172,6 +228,7 @@ class PopupFrame(MyFrame):
         self.add_widgets()
 
     def add_widgets(self):
+        """Adds the widgets to the frame"""
         ttk.Label(self, text=self.text)
         ttk.Button(self, text="New settings")
         ttk.Button(self, text="Keep settings")
