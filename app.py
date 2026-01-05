@@ -125,22 +125,20 @@ class App(tk.Tk):
 
     def new_settings(self):
         """Resets game settings and redirects to the settings menu"""
+        self.round.clear_board()
         self.cronometer['text'] = ""
-        for i in range(self.round.height):
-            for j in range(self.round.width):
-                self.round.board[i][j].destroy()
         self.round = None
         self.settings.reset_settings()
+        self.update_idletasks()
         self.settings.tkraise()
 
     def quit_round(self):
         """Exits the round and redirects to the main menu"""
+        self.round.clear_board()
         self.cronometer['text'] = ""
-        for i in range(self.round.height):
-            for j in range(self.round.width):
-                self.round.board[i][j].destroy()
         self.round = None
         self.settings.reset_settings()
+        self.update_idletasks()
         self.menu.tkraise()
 
     @staticmethod

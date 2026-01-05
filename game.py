@@ -124,10 +124,13 @@ class Game():
         Args:
             result (str): the result
         """
+        for i in range(self.height):
+            for j in range(self.width):
+                self.board[i][j].unbind('<Button-1>')
+                self.board[i][j].unbind('<Button-3>')
         self.popup.winfo_children()[0]['text'] = f"You {result}!"
         self.is_running = False
         self.popup.tkraise()
-
 
     def reveal_tiles(self, i, j):
         """
@@ -146,6 +149,13 @@ class Game():
                     if 0 <= x < self.height and 0 <= y < self.width \
                         and self.board[x][y].status == "hidden":
                             self.reveal_tiles(x, y)
+
+    def clear_board(self):
+        """Clears the board from the last round"""
+        for i in range(self.height):
+            for j in range(self.width):
+                self.board[i][j].destroy()
+        self.board = None
 
     def toggle_flag(self, event, i, j):
         """
