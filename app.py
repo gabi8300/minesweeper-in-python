@@ -91,6 +91,9 @@ class App(tk.Tk):
             mines (int): the number of mines
             timer (int): timer seconds
         """
+        for tile in self.game.board_frame.winfo_children():
+            tile.destroy()
+        
         self.round = Game(
             self.game.board_frame,
             height, width, mines
@@ -125,20 +128,16 @@ class App(tk.Tk):
 
     def new_settings(self):
         """Resets game settings and redirects to the settings menu"""
-        self.round.clear_board()
         self.cronometer['text'] = ""
         self.round = None
         self.settings.reset_settings()
-        self.update_idletasks()
         self.settings.tkraise()
 
     def quit_round(self):
         """Exits the round and redirects to the main menu"""
-        self.round.clear_board()
         self.cronometer['text'] = ""
         self.round = None
         self.settings.reset_settings()
-        self.update_idletasks()
         self.menu.tkraise()
 
     @staticmethod

@@ -150,13 +150,6 @@ class Game():
                         and self.board[x][y].status == "hidden":
                             self.reveal_tiles(x, y)
 
-    def clear_board(self):
-        """Clears the board from the last round"""
-        for i in range(self.height):
-            for j in range(self.width):
-                self.board[i][j].destroy()
-        self.board = None
-
     def toggle_flag(self, event, i, j):
         """
         (Un)Flags the right-clicked tile
