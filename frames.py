@@ -137,6 +137,7 @@ class SettingsFrame(MyFrame):
         ttk.Button(self, text="Back").place(x=20, y=20)
 
     def reset_settings(self):
+        """Resets game settings"""
         self.difficulty.set("")
         self.timer.set(90)
         for param in self.parameters:
