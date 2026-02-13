@@ -1,5 +1,4 @@
 # Minesweeper_in_Python
-# Minesweeper (Python/Tkinter)
 
 A desktop implementation of the Minesweeper game built with Python and the Tkinter library. This project uses an Object-Oriented Programming approach and features a modular, frame-based navigation system.
 
